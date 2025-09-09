@@ -1,0 +1,24 @@
+{
+  "name": "ecommerce-app",
+  "version": "1.0.0",
+  "description": "A full-stack industrial-grade e-commerce application built with React, Node.js, Express, and MongoDB.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shankarj-2218/ecommerce-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shankarj-2218/ecommerce-app/issues"
+  },
+  "homepage": "https://github.com/shankarj-2218/ecommerce-app#readme"
+}
