@@ -35,7 +35,7 @@ const connectDB = async () => {
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
     status: 'OK', 
-    message: 'Hello,Server is running successfully',
+    message: 'Hello,Your Server is running successfully',
     timestamp: new Date().toISOString()
   });
 });
