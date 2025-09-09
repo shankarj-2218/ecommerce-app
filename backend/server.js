@@ -39,6 +39,13 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+// Test endpoint
+app.get('/api/test', (req, res) => {
+  res.status(200).json({ 
+    message: 'Test endpoint is working',
+    data: { example: 'This is test data' }
+  });
+});
 
 // Basic error handling middleware
 app.use((err, req, res, next) => {
@@ -46,8 +53,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
+// 404 handler - FIXED: Use a path string instead of wildcard
+app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
