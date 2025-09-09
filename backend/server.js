@@ -35,14 +35,14 @@ const connectDB = async () => {
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
     status: 'OK', 
-    message: 'Hello,Your Server is running successfully',
+    message: 'Hello,Server is running successfully',
     timestamp: new Date().toISOString()
   });
 });
 // Test endpoint
 app.get('/api/test', (req, res) => {
   res.status(200).json({ 
-    message: 'Test endpoint is working',
+    message: 'TesT endpoint is working',
     data: { example: 'This is test data' }
   });
 });
