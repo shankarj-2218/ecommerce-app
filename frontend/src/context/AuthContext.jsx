@@ -70,7 +70,11 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       dispatch({ type: 'LOGIN_START' })
-      const response = await authAPI.register(userData)
+      
+      // Remove confirmPassword before sending to API
+      const { confirmPassword, ...registrationData } = userData
+      
+      const response = await authAPI.register(registrationData)
       
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
