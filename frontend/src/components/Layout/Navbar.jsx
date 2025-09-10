@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ShoppingCart, User, Menu, X } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ShoppingCart, User, Menu, X, LogOut } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     logout()
     setIsMenuOpen(false)
+    navigate('/')
   }
 
   return (
@@ -38,11 +40,15 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-700">Hello, {user?.firstName}</span>
+                <div className="flex items-center space-x-2">
+                  <User className="h-5 w-5 text-gray-600" />
+                  <span className="text-gray-700">Hello, {user?.firstName}</span>
+                </div>
                 <button
-                  onClick={logout}
-                  className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                  onClick={handleLogout}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                 >
+                  <LogOut className="h-4 w-4 mr-1" />
                   Logout
                 </button>
               </div>
@@ -73,35 +79,57 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-              <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600">
+              <Link 
+                to="/" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Home
               </Link>
-              <Link to="/products" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600">
+              <Link 
+                to="/products" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Products
               </Link>
-              <Link to="/cart" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600 flex items-center">
+              <Link 
+                to="/cart" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600 flex items-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 Cart
               </Link>
               
               {isAuthenticated ? (
                 <>
-                  <div className="block px-3 py-2 text-base font-medium text-gray-700">
+                  <div className="block px-3 py-2 text-base font-medium text-gray-700 flex items-center">
+                    <User className="h-5 w-5 mr-2" />
                     Hello, {user?.firstName}
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600"
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600 flex items-center"
                   >
+                    <LogOut className="h-5 w-5 mr-2" />
                     Logout
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600">
+                  <Link 
+                    to="/login" 
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     Login
                   </Link>
-                  <Link to="/register" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600">
+                  <Link 
+                    to="/register" 
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary-600"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     Register
                   </Link>
                 </>
