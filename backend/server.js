@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
-import productRoutes from './routes/products.js';
+import productRoutes from './routes/product.js'; // Fixed import
+import cartRoutes from './routes/cart.js';
+import orderRoutes from './routes/orders.js';
 
 // Load environment variables
 dotenv.config();
@@ -35,7 +37,10 @@ const connectDB = async () => {
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
+app.use('/api/products', productRoutes); // Added product routes
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
+
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
