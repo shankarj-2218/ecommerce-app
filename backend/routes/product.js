@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
 // GET /api/products/:id - get single product by id
 router.get('/:id', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id); // This is likely line 41
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
