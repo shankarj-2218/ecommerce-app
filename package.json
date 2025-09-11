@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/shankarj-2218/ecommerce-app/issues"
   },
-  "homepage": "https://github.com/shankarj-2218/ecommerce-app#readme"
+  "homepage": "https://github.com/shankarj-2218/ecommerce-app#readme",
+  "dependencies": {
+    "react-hot-toast": "^2.6.0"
+  }
 }
