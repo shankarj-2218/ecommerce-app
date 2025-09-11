@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-4 w-4 ${
+                className={`h-4 w-4 ₹{
                   i < Math.floor(product.ratings) ? 'fill-current' : ''
                 }`}
               />
@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
         
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-primary-600">
-            ${product.price}
+            ₹{product.price}
           </span>
           
           <div className="flex space-x-2">

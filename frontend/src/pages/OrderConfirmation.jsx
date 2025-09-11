@@ -88,7 +88,7 @@ const OrderConfirmation = () => {
             <div className="text-center">
               <ShoppingBag className="h-8 w-8 text-primary-600 mx-auto mb-2" />
               <h3 className="font-semibold">Total</h3>
-              <p className="text-gray-600 text-sm">${order.totalPrice.toFixed(2)}</p>
+              <p className="text-gray-600 text-sm">₹{order.totalPrice.toFixed(2)}</p>
             </div>
           </div>
           

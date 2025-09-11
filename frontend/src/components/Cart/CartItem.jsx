@@ -46,7 +46,7 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
       <div className="flex-1">
         <h3 className="font-semibold text-gray-900">{item.product.name}</h3>
         <p className="text-gray-600 text-sm">{item.product.category}</p>
-        <p className="text-lg font-bold text-primary-600">${item.price}</p>
+        <p className="text-lg font-bold text-primary-600">₹{item.price}</p>
       </div>
       
       <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ const CartItem = ({ item, onUpdate, onRemove }) => {
       </div>
       
       <div className="text-right">
-        <p className="text-lg font-bold">${(item.price * item.quantity).toFixed(2)}</p>
+        <p className="text-lg font-bold">₹{(item.price * item.quantity).toFixed(2)}</p>
         <button
           onClick={handleRemove}
           disabled={removing}
