@@ -45,7 +45,7 @@ const Cart = () => {
     
     const subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
     const tax = subtotal * 0.1 // 10% tax
-    const shipping = subtotal > 100 ? 0 : 10 // Free shipping over $100
+    const shipping = subtotal > 100 ? 0 : 10 // Free shipping over ₹100
     const total = subtotal + tax + shipping
     
     return { subtotal, tax, shipping, total }

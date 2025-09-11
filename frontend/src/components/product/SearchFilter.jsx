@@ -99,12 +99,12 @@ const SearchFilter = ({ onSearch, onFilter, categories }) => {
                 className="input-field"
               >
                 <option value="">All Prices</option>
-                <option value="0-25">Under $25</option>
-                <option value="25-50">$25 to $50</option>
-                <option value="50-100">$50 to $100</option>
-                <option value="100-500">$100 to $500</option>
-                <option value="500-1000">$500 to $1000</option>
-                <option value="1000+">Over $1000</option>
+                <option value="0-25">Under ₹25</option>
+                <option value="25-50">₹25 to ₹50</option>
+                <option value="50-100">₹50 to ₹100</option>
+                <option value="100-500">₹100 to ₹500</option>
+                <option value="500-1000">₹500 to ₹1000</option>
+                <option value="1000+">Over ₹1000</option>
               </select>
             </div>
           </div>

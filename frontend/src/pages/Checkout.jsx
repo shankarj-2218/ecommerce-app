@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, MapPin, CreditCard, Shield } from 'lucide-react'
+import { Loader2, MapPin, CreditCard, Shield, IndianRupee } from 'lucide-react'
 import { cartAPI, ordersAPI } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
+import { loadRazorpay, createRazorpayOrder, verifyRazorpayPayment } from '../lib/razorpay'
 import OrderSummary from '../components/Cart/OrderSummary'
 import toast from 'react-hot-toast'
 
@@ -11,6 +12,7 @@ const Checkout = () => {
   const [cart, setCart] = useState(null)
   const [loading, setLoading] = useState(true)
   const [processing, setProcessing] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState('razorpay')
   const { user } = useAuth()
   const navigate = useNavigate()
   
@@ -49,11 +51,94 @@ const Checkout = () => {
     if (!cart || !cart.items) return { subtotal: 0, tax: 0, shipping: 0, total: 0 }
     
     const subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-    const tax = subtotal * 0.1
-    const shipping = subtotal > 100 ? 0 : 10
+    const tax = subtotal * 0.1 // 10% tax
+    const shipping = subtotal > 100 ? 0 : 10 // Free shipping over $100
     const total = subtotal + tax + shipping
     
     return { subtotal, tax, shipping, total }
+  }
+
+  const handleRazorpayPayment = async (orderData) => {
+    try {
+      setProcessing(true)
+      
+      // Create the order first
+      const orderResponse = await ordersAPI.create(orderData)
+      const order = orderResponse.data
+      
+      // Load Razorpay SDK
+      const Razorpay = await loadRazorpay()
+      if (!Razorpay) {
+        throw new Error('Failed to load payment gateway')
+      }
+      
+      // Create Razorpay order
+      const razorpayOrder = await createRazorpayOrder({
+        orderId: order._id,
+        amount: order.totalPrice,
+        currency: 'INR'
+      })
+      
+      // Razorpay options
+      const options = {
+        key: razorpayOrder.key,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        name: 'ShopSphere',
+        description: `Order #${order._id.slice(-8).toUpperCase()}`,
+        image: '/logo.png',
+        order_id: razorpayOrder.id,
+        handler: async function (response) {
+          try {
+            // Verify payment on our server
+            const verification = await verifyRazorpayPayment({
+              order_id: response.razorpay_order_id,
+              payment_id: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+              orderId: order._id
+            })
+            
+            if (verification.success) {
+              toast.success('Payment successful!')
+              navigate(`/order-confirmation/${order._id}`)
+            } else {
+              toast.error('Payment verification failed')
+              setProcessing(false)
+            }
+          } catch (error) {
+            console.error('Payment verification error:', error)
+            toast.error('Payment verification failed')
+            setProcessing(false)
+          }
+        },
+        prefill: {
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email,
+          contact: user.mobile, // You can add phone field to user model
+        },
+        notes: {
+          orderId: order._id,
+        },
+        theme: {
+          color: '#2563eb',
+        },
+        modal: {
+          ondismiss: function() {
+            setProcessing(false)
+            toast('Payment cancelled', { icon: '⚠️' })
+          },
+        },
+      };
+      
+      // Open Razorpay payment modal
+      const rzp = new Razorpay(options)
+      rzp.open()
+      
+    } catch (error) {
+      console.error('Razorpay payment error:', error)
+      toast.error(error.message || 'Payment processing failed')
+      setProcessing(false)
+    }
   }
 
   const onSubmit = async (data) => {
@@ -62,25 +147,21 @@ const Checkout = () => {
       return
     }
 
-    setProcessing(true)
-    try {
-      const orderData = {
-        shippingAddress: {
-          address: data.address,
-          city: data.city,
-          postalCode: data.postalCode,
-          country: data.country
-        },
-        paymentMethod: 'Stripe' // Will integrate with Stripe in Day 10
-      }
+    const orderData = {
+      shippingAddress: {
+        address: data.address,
+        city: data.city,
+        postalCode: data.postalCode,
+        country: data.country
+      },
+      paymentMethod: paymentMethod
+    }
 
-      const response = await ordersAPI.create(orderData)
-      toast.success('Order placed successfully!')
-      navigate(`/order-confirmation/${response.data._id}`)
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to place order')
-    } finally {
-      setProcessing(false)
+    if (paymentMethod === 'razorpay') {
+      await handleRazorpayPayment(orderData)
+    } else {
+      // Handle other payment methods
+      toast.error('Selected payment method is not available')
     }
   }
 
@@ -231,6 +312,7 @@ const Checkout = () => {
                   className="input-field"
                 >
                   <option value="">Select Country</option>
+                  <option value="India">India</option>
                   <option value="USA">United States</option>
                   <option value="UK">United Kingdom</option>
                   <option value="Canada">Canada</option>
@@ -251,23 +333,27 @@ const Checkout = () => {
               <h2 className="text-xl font-semibold">Payment Method</h2>
             </div>
             
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="flex items-center mb-2">
-                <input
-                  type="radio"
-                  id="stripe"
-                  name="paymentMethod"
-                  value="stripe"
-                  defaultChecked
-                  className="h-4 w-4 text-primary-600"
-                />
-                <label htmlFor="stripe" className="ml-2 font-medium">
-                  Credit/Debit Card (Stripe)
-                </label>
+            <div className="space-y-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <input
+                    type="radio"
+                    id="razorpay"
+                    name="paymentMethod"
+                    value="razorpay"
+                    checked={paymentMethod === 'razorpay'}
+                    onChange={() => setPaymentMethod('razorpay')}
+                    className="h-4 w-4 text-primary-600"
+                  />
+                  <label htmlFor="razorpay" className="ml-2 font-medium flex items-center">
+                    <IndianRupee className="h-5 w-5 mr-1" />
+                    UPI / Credit Card / Debit Card / Net Banking (Razorpay)
+                  </label>
+                </div>
+                <p className="text-sm text-gray-600 ml-6">
+                  Pay securely using Razorpay. Supports all Indian payment methods including UPI, cards, net banking, and wallets.
+                </p>
               </div>
-              <p className="text-sm text-gray-600 ml-6">
-                Pay securely using Stripe. Your payment information will be encrypted.
-              </p>
             </div>
             
             <div className="mt-6 flex items-center text-sm text-gray-600">
@@ -297,7 +383,7 @@ const Checkout = () => {
                   Processing...
                 </>
               ) : (
-                `Pay $${total.toFixed(2)}`
+                `Pay ₹ ${total.toFixed(2)}`
               )}
             </button>
             

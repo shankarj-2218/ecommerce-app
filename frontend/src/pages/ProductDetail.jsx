@@ -226,7 +226,7 @@ const ProductDetail = () => {
             <div>
               <h3 className="font-semibold text-lg mb-3">Shipping & Returns</h3>
               <ul className="space-y-2">
-                <li>Free shipping on orders over $100</li>
+                <li>Free shipping on orders over ₹100</li>
                 <li>30-day return policy</li>
                 <li>Secure payment processing</li>
                 <li>24/7 customer support</li>

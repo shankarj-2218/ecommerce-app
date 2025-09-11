@@ -11,6 +11,11 @@ import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import AdminLayout from "./components/Admin/AdminLayout";
+import AdminProducts from "./pages/admin/AdminProducts";
+import ProductEdit from "./pages/admin/ProductEdit";
+import ProductCreate from "./pages/admin/ProductCreate";
+import AdminRoute from "./components/Admin/AdminRoute";
 
 function App() {
   return (
@@ -31,6 +36,18 @@ function App() {
                 path="/order-confirmation/:id"
                 element={<OrderConfirmation />}
               />
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminLayout />
+                  </AdminRoute>
+                }
+              >
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="products/new" element={<ProductCreate />} />
+                <Route path="products/edit/:id" element={<ProductEdit />} />
+              </Route>
             </Routes>
           </main>
           <Footer />
