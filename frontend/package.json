@@ -14,11 +14,15 @@
     "react",
     "vite"
   ],
-  "author": "Your Name",
+  "author": "ShopSphere",
   "license": "MIT",
   "dependencies": {
+    "@headlessui/react": "^2.2.8",
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.1",
+    "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.11.0",
+    "framer-motion": "^12.23.12",
     "lucide-react": "^0.543.0",
     "react": "latest",
     "react-dom": "latest",
@@ -31,10 +35,11 @@
     "zod": "^4.1.7"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "latest",
+    "@tailwindcss/postcss": "^4.1.13",
+    "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
-    "vite": "latest"
+    "vite": "^7.1.5"
   }
 }

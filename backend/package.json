@@ -10,8 +10,6 @@
     "db:start": "docker-compose up -d",
     "db:stop": "docker-compose down",
     "db:clean": "docker-compose down -v",
-    "seed:products": "node scripts/seedProducts.js",
-    "seed:data": "node scripts/seedData.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
