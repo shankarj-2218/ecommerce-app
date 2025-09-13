@@ -20,6 +20,9 @@ import AdminRoute from "./components/Admin/AdminRoute";
 function App() {
   return (
     <AuthProvider>
+      {/* <div className="min-h-screen flex items-center justify-center bg-black">
+        <h1 className="text-6xl font-bold text-white">Tailwind Works 🎉</h1>
+      </div> */}
       <Router>
         <div className="min-h-screen flex flex-col">
           <Navbar />

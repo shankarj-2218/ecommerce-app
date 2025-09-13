@@ -7,8 +7,11 @@ const admin = (req, res, next) => {
 };
 
 export const admins = [
-    { username: 'admin1', password: 'password1' },
-    { username: 'admin2', password: 'password2' }
+    { email: 'admin@example.com',
+      password: '123456',
+      firstName: 'Admin',
+      lastName: 'User',
+      role: 'admin'},
 ];
 
 export default admin;
